@@ -50,8 +50,10 @@ git clone https://github.com/EricKart/ai900-azure-foundry.git
 cd ai900-azure-foundry
 
 # 2. Run the setup script
-# Windows:
+# Windows (Command Prompt):
 setup.bat
+# Windows (PowerShell):
+.\setup.bat
 # macOS/Linux:
 chmod +x setup.sh && ./setup.sh
 

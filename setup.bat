@@ -55,7 +55,7 @@ echo.
 
 REM -- Create virtual environment ----------------------------------------
 if not exist ".venv" (
-    echo Creating virtual environment (.venv)...
+    echo Creating virtual environment...
     python -m venv .venv
     if %ERRORLEVEL% neq 0 (
         echo [ERROR] Failed to create virtual environment.
