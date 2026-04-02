@@ -8,89 +8,103 @@
 
 ---
 
-## Quick Start
+## How to Use This Repo (Follow These Steps In Order)
 
-| Method | Time to Start | Difficulty | Guide |
-|--------|--------------|------------|-------|
-| **GitHub Codespaces** (recommended) | ~2 min | Easiest | [Codespaces Setup](docs/04_codespaces_setup.md) |
-| **Windows Local** | ~10 min | Easy | [Windows Setup](docs/02_local_setup_windows.md) |
-| **macOS Local** | ~10 min | Easy | [macOS Setup](docs/03_local_setup_mac.md) |
+### Step 1: Get an Azure Account
 
----
-
-## What You'll Learn
-
-Each notebook maps directly to an **AI-900 exam domain**:
-
-| # | Notebook | AI-900 Domain | What It Does |
-|---|----------|---------------|-------------|
-| 0 | [Connection Test](notebooks/00_connection_test.ipynb) | Setup | Verifies your Azure credentials and service connectivity |
-| 1 | [Responsible AI](notebooks/01_responsible_ai.ipynb) | AI Principles | Explore the 6 Microsoft Responsible AI principles + Content Safety API |
-| 2 | [Computer Vision](notebooks/02_computer_vision.ipynb) | Computer Vision | Image analysis, OCR, object detection on sample images |
-| 3 | [Natural Language](notebooks/03_natural_language.ipynb) | NLP | Sentiment analysis, key phrases, NER, translation |
-| 4 | [Speech AI](notebooks/04_speech_ai.ipynb) | Speech | Text-to-Speech and Speech-to-Text with audio playback |
-| 5 | [Generative AI](notebooks/05_generative_ai.ipynb) | Generative AI | Chat with GPT-4o-mini, prompt engineering patterns |
-| 6 | [Document Intelligence](notebooks/06_document_intelligence.ipynb) | Document AI | Extract structured data from invoices and receipts |
+Sign up for a free **Azure for Students** account ($100 credit, no credit card):
+👉 [https://azure.microsoft.com/en-us/free/students/](https://azure.microsoft.com/en-us/free/students/)
 
 ---
 
-## Prerequisites
+### Step 2: Create Azure Resources
 
-1. **Azure for Students account** (free $100 credit) — [Sign up here](https://azure.microsoft.com/en-us/free/students/)
-2. **Azure AI Foundry resources** — Follow [Azure Portal Setup Guide](docs/01_azure_portal_setup.md)
-3. **Python 3.8+** — Only needed for local setup (Codespaces handles this automatically)
+Follow the **Azure Portal Setup Guide** to create all the required Azure services and get your keys:
+
+👉 **[docs/01_azure_portal_setup.md](docs/01_azure_portal_setup.md)**
+
+This guide walks you through:
+- Creating a Resource Group
+- Creating an Azure AI Services multi-service resource
+- Creating an Azure OpenAI resource and deploying GPT-4o-mini
+- Copying all your keys and endpoints
+
+**Do NOT skip this step.** You need these keys before running any notebook.
 
 ---
 
-## Setup (3 Steps)
+### Step 3: Set Up Your Environment (Pick ONE Method)
 
-### Step 1: Clone the Repository
+| Method | Time | Best For | Guide |
+|--------|------|----------|-------|
+| **GitHub Codespaces** | ~2 min | No install needed, runs in browser | 👉 [docs/04_codespaces_setup.md](docs/04_codespaces_setup.md) |
+| **Windows Local** | ~10 min | Running on your own Windows PC | 👉 [docs/02_local_setup_windows.md](docs/02_local_setup_windows.md) |
+| **macOS Local** | ~10 min | Running on your own Mac | 👉 [docs/03_local_setup_mac.md](docs/03_local_setup_mac.md) |
 
+**Using Codespaces?** Click the badge at the top of this page, add your keys to `.env`, and skip to Step 4.
+
+**Using Local setup?** Quick summary:
 ```bash
+# 1. Clone the repo
 git clone https://github.com/EricKart/ai900-azure-foundry.git
 cd ai900-azure-foundry
-```
 
-### Step 2: Run the Setup Script
-
-**Windows (PowerShell or Command Prompt):**
-```cmd
+# 2. Run the setup script
+# Windows:
 setup.bat
-```
+# macOS/Linux:
+chmod +x setup.sh && ./setup.sh
 
-**macOS / Linux (Terminal):**
-```bash
-chmod +x setup.sh
-./setup.sh
-```
+# 3. Open .env and paste your Azure keys from Step 2
 
-This will:
-- Create a Python virtual environment
-- Install all dependencies
-- Create your `.env` file from the template
-
-### Step 3: Add Your Azure Credentials
-
-Open the `.env` file and paste your keys from the [Azure Portal Setup Guide](docs/01_azure_portal_setup.md):
-
-```ini
-AZURE_AI_ENDPOINT=https://your-resource.cognitiveservices.azure.com/
-AZURE_AI_KEY=your-key-here
-AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
-AZURE_OPENAI_KEY=your-key-here
-...
-```
-
-Then open Jupyter and run the notebooks in order:
-```bash
+# 4. Start Jupyter
+# Windows:
+.venv\Scripts\activate
+jupyter notebook
+# macOS/Linux:
+source .venv/bin/activate
 jupyter notebook
 ```
 
 ---
 
-## Troubleshooting
+### Step 4: Run the Notebooks (In Order)
 
-Running into issues? Check the [Troubleshooting Guide](docs/troubleshooting.md) — it covers the top 10 common problems students encounter.
+Open Jupyter and run each notebook sequentially. Every notebook maps to an **AI-900 exam domain**:
+
+| Order | Notebook | AI-900 Domain | What It Does |
+|:-----:|----------|---------------|-------------|
+| **1st** | [00_connection_test.ipynb](notebooks/00_connection_test.ipynb) | Setup | **Run this first!** Verifies your Azure keys work |
+| **2nd** | [01_responsible_ai.ipynb](notebooks/01_responsible_ai.ipynb) | AI Principles | Explore the 6 Microsoft Responsible AI principles + Content Safety API |
+| **3rd** | [02_computer_vision.ipynb](notebooks/02_computer_vision.ipynb) | Computer Vision | Image analysis, OCR, object detection on sample images |
+| **4th** | [03_natural_language.ipynb](notebooks/03_natural_language.ipynb) | NLP | Sentiment analysis, key phrases, NER, translation |
+| **5th** | [04_speech_ai.ipynb](notebooks/04_speech_ai.ipynb) | Speech | Text-to-Speech and Speech-to-Text with audio playback |
+| **6th** | [05_generative_ai.ipynb](notebooks/05_generative_ai.ipynb) | Generative AI | Chat with GPT-4o-mini, prompt engineering patterns |
+| **7th** | [06_document_intelligence.ipynb](notebooks/06_document_intelligence.ipynb) | Document AI | Extract structured data from invoices and receipts |
+
+> **Tip:** In each notebook, just click **"Run All"** (or press `Shift+Enter` on each cell). No code changes needed.
+
+---
+
+### Step 5: Stuck? Check the Troubleshooting Guide
+
+Running into errors? The troubleshooting guide covers the top 10 issues students hit:
+
+👉 **[docs/troubleshooting.md](docs/troubleshooting.md)**
+
+Common problems covered: `python not recognized`, 401/404 errors, missing modules, Speech SDK issues, and more.
+
+---
+
+## Complete Guide Reference
+
+| # | Document | When to Use |
+|---|----------|-------------|
+| 1 | [docs/01_azure_portal_setup.md](docs/01_azure_portal_setup.md) | **First** — create Azure resources and get your keys |
+| 2 | [docs/02_local_setup_windows.md](docs/02_local_setup_windows.md) | Setting up on Windows |
+| 2 | [docs/03_local_setup_mac.md](docs/03_local_setup_mac.md) | Setting up on macOS |
+| 2 | [docs/04_codespaces_setup.md](docs/04_codespaces_setup.md) | Setting up via browser (no install) |
+| 3 | [docs/troubleshooting.md](docs/troubleshooting.md) | When something goes wrong |
 
 ---
 
@@ -98,16 +112,36 @@ Running into issues? Check the [Troubleshooting Guide](docs/troubleshooting.md) 
 
 ```
 ai900-azure-foundry/
-├── notebooks/          ← Jupyter notebooks (run these!)
+├── notebooks/          ← Jupyter notebooks (run these in order!)
+│   ├── 00_connection_test.ipynb
+│   ├── 01_responsible_ai.ipynb
+│   ├── 02_computer_vision.ipynb
+│   ├── 03_natural_language.ipynb
+│   ├── 04_speech_ai.ipynb
+│   ├── 05_generative_ai.ipynb
+│   └── 06_document_intelligence.ipynb
+├── docs/               ← Setup guides (read before running notebooks)
 ├── assets/             ← Sample images, audio, and documents
-├── docs/               ← Setup guides and troubleshooting
-├── scripts/            ← Helper scripts
-├── .devcontainer/      ← GitHub Codespaces configuration
+├── scripts/            ← Helper scripts (check_env.py)
+├── .devcontainer/      ← GitHub Codespaces auto-configuration
 ├── .env.example        ← Template for Azure credentials
 ├── requirements.txt    ← Python dependencies
 ├── setup.bat           ← Windows setup script
 └── setup.sh            ← macOS/Linux setup script
 ```
+
+---
+
+## Cost
+
+| Service | Free Allowance |
+|---------|----------------|
+| Azure AI Services | 20 transactions/min — plenty for labs |
+| Azure OpenAI (GPT-4o-mini) | ~$0.15 per 1M input tokens |
+| Azure Speech | 5 hours free/month |
+| Document Intelligence | 500 pages free/month |
+
+> **Total estimated cost:** Less than **$1** with Azure for Students credits.
 
 ---
 
