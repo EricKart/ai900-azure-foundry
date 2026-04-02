@@ -1,0 +1,23 @@
+{
+  "name": "ai900-azure-foundry",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "postCreateCommand": "pip install --upgrade pip && pip install -r requirements.txt && cp -n .env.example .env 2>/dev/null || true",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-toolsai.jupyter",
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "jupyter.askForKernelRestart": false,
+        "notebook.output.scrolling": true
+      }
+    }
+  },
+  "forwardPorts": [8888],
+  "remoteEnv": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}

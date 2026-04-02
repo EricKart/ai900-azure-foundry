@@ -1,0 +1,54 @@
+name: Validate Notebooks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validation tools
+        run: pip install nbformat
+
+      - name: Validate notebook JSON
+        run: |
+          python -c "
+          import nbformat
+          import sys
+          import glob
+
+          errors = []
+          notebooks = glob.glob('notebooks/*.ipynb')
+          print(f'Found {len(notebooks)} notebooks to validate')
+
+          for nb_path in sorted(notebooks):
+              try:
+                  with open(nb_path, 'r', encoding='utf-8') as f:
+                      nb = nbformat.read(f, as_version=4)
+                  nbformat.validate(nb)
+                  print(f'  [PASS] {nb_path}')
+              except Exception as e:
+                  print(f'  [FAIL] {nb_path}: {e}')
+                  errors.append(nb_path)
+
+          if errors:
+              print(f'\n{len(errors)} notebook(s) have validation errors!')
+              sys.exit(1)
+          else:
+              print(f'\nAll {len(notebooks)} notebooks are valid!')
+          "
+
+      - name: Check Python syntax
+        run: |
+          python -m py_compile scripts/check_env.py
+          echo "[PASS] scripts/check_env.py"
