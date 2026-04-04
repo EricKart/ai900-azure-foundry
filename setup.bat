@@ -54,6 +54,13 @@ python --version
 echo.
 
 REM -- Create virtual environment ----------------------------------------
+REM Check if venv exists AND is valid (has activate.bat)
+if exist ".venv" (
+    if not exist ".venv\Scripts\activate.bat" (
+        echo [WARN] Virtual environment is incomplete or corrupted. Recreating...
+        rmdir /s /q .venv
+    )
+)
 if not exist ".venv" (
     echo Creating virtual environment...
     python -m venv .venv
