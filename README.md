@@ -1,7 +1,7 @@
 # AI-900 Hands-On Lab with Azure AI Foundry
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/EricKart/ai900-azure-foundry?quickstart=1)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10–3.13](https://img.shields.io/badge/python-3.10–3.13-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > **No coding required!** Clone this repo, set up your Azure credentials, and run pre-built Jupyter notebooks to explore every AI-900 exam domain hands-on.
@@ -90,23 +90,34 @@ Open Jupyter and run each notebook sequentially. Every notebook maps to an **AI-
 
 ### Step 5: Stuck? Check the Troubleshooting Guide
 
-Running into errors? The troubleshooting guide covers the top 10 issues students hit:
+Running into errors? The troubleshooting guide covers **every common issue** with exact symptoms and fixes:
 
 👉 **[docs/troubleshooting.md](docs/troubleshooting.md)**
 
-Common problems covered: `python not recognized`, 401/404 errors, missing modules, Speech SDK issues, and more.
+Covers: Python version problems (3.14+ too new, 3.9 too old), `python not recognized`, pip install failures, `.env` mistakes, 401/404 Azure errors, Jupyter kernel issues, firewall/VPN blocks, macOS-specific problems, and more.
+
+### Python Version Note
+
+| Version | Status |
+|---------|--------|
+| 3.10 – 3.13 | ✅ Supported |
+| **3.11** | ✅ **Recommended** |
+| 3.14+ | ⚠️ May not work (Azure SDKs may not support it yet) |
+| 3.9 or older | ❌ Not supported |
+
+If you have Python 3.14+, see the setup guides for how to install 3.11 side-by-side or switch versions.
 
 ---
 
 ## Complete Guide Reference
 
-| # | Document | When to Use |
-|---|----------|-------------|
-| 1 | [docs/01_azure_portal_setup.md](docs/01_azure_portal_setup.md) | **First** — create Azure resources and get your keys |
-| 2 | [docs/02_local_setup_windows.md](docs/02_local_setup_windows.md) | Setting up on Windows |
-| 2 | [docs/03_local_setup_mac.md](docs/03_local_setup_mac.md) | Setting up on macOS |
-| 2 | [docs/04_codespaces_setup.md](docs/04_codespaces_setup.md) | Setting up via browser (no install) |
-| 3 | [docs/troubleshooting.md](docs/troubleshooting.md) | When something goes wrong |
+| # | Document | What It Covers |
+|---|----------|----------------|
+| 1 | [docs/01_azure_portal_setup.md](docs/01_azure_portal_setup.md) | **First** — Create Azure resources, get keys, fill `.env` |
+| 2 | [docs/02_local_setup_windows.md](docs/02_local_setup_windows.md) | End-to-end Windows setup: Python check/install, version handling, venv, deps, verification |
+| 2 | [docs/03_local_setup_mac.md](docs/03_local_setup_mac.md) | End-to-end macOS setup: Homebrew, Python, Apple Silicon notes, Speech SDK |
+| 2 | [docs/04_codespaces_setup.md](docs/04_codespaces_setup.md) | Zero-install browser setup via GitHub Codespaces |
+| 3 | [docs/troubleshooting.md](docs/troubleshooting.md) | Every common error: Python versions, pip, .env, Azure API, Jupyter, network |
 
 ---
 
