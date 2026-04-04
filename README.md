@@ -37,9 +37,10 @@ This guide walks you through:
 
 | Method | Time | Best For | Guide |
 |--------|------|----------|-------|
-| **GitHub Codespaces** | ~2 min | No install needed, runs in browser | 👉 [docs/04_codespaces_setup.md](docs/04_codespaces_setup.md) |
-| **Windows Local** | ~10 min | Running on your own Windows PC | 👉 [docs/02_local_setup_windows.md](docs/02_local_setup_windows.md) |
-| **macOS Local** | ~10 min | Running on your own Mac | 👉 [docs/03_local_setup_mac.md](docs/03_local_setup_mac.md) |
+| **GitHub Codespaces** | ~2 min | No install needed, runs in browser | [docs/04_codespaces_setup.md](docs/04_codespaces_setup.md) |
+| **Windows Local** | ~10 min | Running on your own Windows PC | [docs/02_local_setup_windows.md](docs/02_local_setup_windows.md) |
+| **macOS Local** | ~10 min | Running on your own Mac | [docs/03_local_setup_mac.md](docs/03_local_setup_mac.md) |
+| **Linux Local** | ~10 min | Running on your own Linux machine | [docs/05_local_setup_linux.md](docs/05_local_setup_linux.md) |
 
 **Using Codespaces?** Click the badge at the top of this page, add your keys to `.env`, and skip to Step 4.
 
@@ -113,11 +114,12 @@ If you have Python 3.14+, see the setup guides for how to install 3.11 side-by-s
 
 | # | Document | What It Covers |
 |---|----------|----------------|
-| 1 | [docs/01_azure_portal_setup.md](docs/01_azure_portal_setup.md) | **First** — Create Azure resources, get keys, fill `.env` |
-| 2 | [docs/02_local_setup_windows.md](docs/02_local_setup_windows.md) | End-to-end Windows setup: Python check/install, version handling, venv, deps, verification |
-| 2 | [docs/03_local_setup_mac.md](docs/03_local_setup_mac.md) | End-to-end macOS setup: Homebrew, Python, Apple Silicon notes, Speech SDK |
+| 1 | [docs/01_azure_portal_setup.md](docs/01_azure_portal_setup.md) | **First** -- Create Azure resources, get keys, fill `.env` |
+| 2 | [docs/02_local_setup_windows.md](docs/02_local_setup_windows.md) | Windows setup: Python, venv, deps, verification |
+| 2 | [docs/03_local_setup_mac.md](docs/03_local_setup_mac.md) | macOS setup: Homebrew, Python, Apple Silicon notes |
+| 2 | [docs/05_local_setup_linux.md](docs/05_local_setup_linux.md) | Linux setup: Ubuntu, Debian, Fedora |
 | 2 | [docs/04_codespaces_setup.md](docs/04_codespaces_setup.md) | Zero-install browser setup via GitHub Codespaces |
-| 3 | [docs/troubleshooting.md](docs/troubleshooting.md) | Every common error: Python versions, pip, .env, Azure API, Jupyter, network |
+| 3 | [docs/troubleshooting.md](docs/troubleshooting.md) | Every common error with exact fixes |
 
 ---
 

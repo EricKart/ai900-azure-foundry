@@ -2,64 +2,89 @@
 # ==========================================================================
 #  AI-900 Azure AI Foundry - macOS / Linux Setup Script
 # ==========================================================================
-#  This script will:
-#    1. Check that Python 3.8+ is installed
-#    2. Create a virtual environment
-#    3. Install all dependencies
-#    4. Create your .env file from the template
-#    5. Show next steps
+#  Safe to re-run. Handles: broken venv, missing system packages,
+#  Pillow build failures, Apple Silicon, and all common student issues.
 # ==========================================================================
 
 set -e
 
 echo ""
 echo "============================================================"
-echo "  AI-900 Azure AI Foundry - Setup"
+echo "  AI-900 Azure AI Foundry - Setup (macOS / Linux)"
 echo "============================================================"
 echo ""
 
+# -- Detect OS -----------------------------------------------------------
+OS_TYPE="linux"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    OS_TYPE="macos"
+fi
+
 # -- Check Python is available -------------------------------------------
 PYTHON_CMD=""
-if command -v python3 &> /dev/null; then
-    PYTHON_CMD="python3"
-elif command -v python &> /dev/null; then
-    PYTHON_CMD="python"
-else
-    echo "[ERROR] Python is not installed."
+for cmd in python3.11 python3.12 python3.13 python3.10 python3 python; do
+    if command -v "$cmd" &> /dev/null; then
+        # Check version is 3.10-3.13
+        if $cmd -c "import sys; exit(0 if (3,10) <= sys.version_info < (3,14) else 1)" 2>/dev/null; then
+            PYTHON_CMD="$cmd"
+            break
+        fi
+    fi
+done
+
+if [ -z "$PYTHON_CMD" ]; then
+    echo "[ERROR] Python 3.10 to 3.13 is required but not found."
     echo ""
-    echo "  How to fix (macOS):"
-    echo "    brew install python@3.11"
-    echo ""
-    echo "  How to fix (Ubuntu/Debian):"
-    echo "    sudo apt update && sudo apt install python3 python3-venv python3-pip"
+    if [ "$OS_TYPE" = "macos" ]; then
+        echo "  Install Python 3.11:"
+        echo "    brew install python@3.11"
+        echo ""
+        echo "  Don't have Homebrew? Install it first:"
+        echo "    /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+    else
+        echo "  Install Python 3.11:"
+        echo "    Ubuntu/Debian:  sudo apt update && sudo apt install python3.11 python3.11-venv python3-pip"
+        echo "    Fedora:         sudo dnf install python3.11"
+        echo "    Arch:           sudo pacman -S python"
+    fi
     echo ""
     echo "  Or download from: https://www.python.org/downloads/"
     echo ""
     exit 1
 fi
 
-# -- Check Python version >= 3.8 ----------------------------------------
-$PYTHON_CMD -c "import sys; exit(0 if sys.version_info >= (3, 8) else 1)" 2>/dev/null
-if [ $? -ne 0 ]; then
-    echo "[ERROR] Python 3.8 or higher is required."
+echo "[OK] Python found: $($PYTHON_CMD --version 2>&1)"
+echo ""
+
+# -- Check venv module is available --------------------------------------
+if ! $PYTHON_CMD -c "import venv" 2>/dev/null; then
+    echo "[ERROR] Python venv module is not installed."
     echo ""
-    echo "  Your current version:"
-    $PYTHON_CMD --version
-    echo ""
-    echo "  Please install Python 3.11:"
-    echo "    macOS:  brew install python@3.11"
-    echo "    Linux:  sudo apt install python3.11"
+    if [ "$OS_TYPE" = "macos" ]; then
+        echo "  Fix: brew install python@3.11"
+    else
+        echo "  Fix: sudo apt install python3-venv"
+    fi
     echo ""
     exit 1
 fi
 
-echo "[OK] Python found: $($PYTHON_CMD --version)"
-echo ""
+# -- Handle virtual environment ------------------------------------------
+if [ -d ".venv" ] && [ ! -f ".venv/bin/activate" ]; then
+    echo "[WARN] Virtual environment is broken. Removing..."
+    rm -rf .venv
+fi
 
-# -- Create virtual environment ------------------------------------------
 if [ ! -d ".venv" ]; then
     echo "Creating virtual environment (.venv)..."
     $PYTHON_CMD -m venv .venv
+    if [ $? -ne 0 ]; then
+        echo "[ERROR] Failed to create virtual environment."
+        if [ "$OS_TYPE" != "macos" ]; then
+            echo "  Try: sudo apt install python3-venv"
+        fi
+        exit 1
+    fi
     echo "[OK] Virtual environment created."
 else
     echo "[OK] Virtual environment already exists."
@@ -81,18 +106,43 @@ echo ""
 # -- Install dependencies ------------------------------------------------
 echo "Installing dependencies (this may take 2-3 minutes)..."
 
-# --prefer-binary tells pip to use pre-built wheels instead of compiling
-# from source. This prevents Pillow and other C-extension packages from
-# failing to build on macOS when Xcode/system libs are not present.
+# --prefer-binary: use pre-built wheels, avoids compiling Pillow from source.
 pip install -r requirements.txt --quiet --prefer-binary
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "[WARN] First attempt had issues. Retrying..."
+    echo ""
+    pip install -r requirements.txt --prefer-binary
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "[ERROR] Failed to install dependencies."
+        echo ""
+        if [ "$OS_TYPE" = "macos" ]; then
+            echo "  Try these fixes:"
+            echo "    1. Install Xcode tools: xcode-select --install"
+            echo "    2. Delete venv and retry: rm -rf .venv && ./setup.sh"
+            echo "    3. Use Python 3.11: brew install python@3.11"
+        else
+            echo "  Try these fixes:"
+            echo "    1. sudo apt install build-essential python3-dev"
+            echo "    2. Delete venv and retry: rm -rf .venv && ./setup.sh"
+        fi
+        echo ""
+        exit 1
+    fi
+fi
 echo "[OK] All dependencies installed."
 echo ""
 
 # -- Create .env from template -------------------------------------------
 if [ ! -f ".env" ]; then
-    cp .env.example .env
-    echo "[OK] Created .env file from template."
-    echo "     IMPORTANT: Open .env and paste your Azure keys!"
+    if [ -f ".env.example" ]; then
+        cp .env.example .env
+        echo "[OK] Created .env file from template."
+        echo "     IMPORTANT: Open .env and paste your Azure keys!"
+    else
+        echo "[WARN] No .env.example found. Create .env manually."
+    fi
 else
     echo "[OK] .env file already exists."
 fi
@@ -109,10 +159,10 @@ echo "============================================================"
 echo "  Setup Complete! Next Steps:"
 echo "============================================================"
 echo ""
-echo "  1. Open the .env file and paste your Azure credentials"
-echo "     (see docs/01_azure_portal_setup.md for guidance)"
+echo "  1. Open .env and paste your Azure credentials"
+echo "     (see docs/01_azure_portal_setup.md)"
 echo ""
-echo "  2. Start Jupyter Notebook:"
+echo "  2. Start Jupyter:"
 echo "     source .venv/bin/activate"
 echo "     jupyter notebook"
 echo ""
