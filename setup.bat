@@ -55,41 +55,42 @@ echo.
 
 REM -- Create virtual environment ----------------------------------------
 REM Check if venv exists AND is valid (has activate.bat)
-if exist ".venv" (
-    if not exist ".venv\Scripts\activate.bat" (
-        echo [WARN] Virtual environment is incomplete or corrupted. Recreating...
-        rmdir /s /q .venv 2>nul
-        if exist ".venv" (
-            echo [ERROR] Could not delete the broken .venv folder.
-            echo         A program (likely VS Code) is locking the files inside it.
-            echo.
-            echo  Fix: In VS Code, press Ctrl+Shift+P and run:
-            echo       "Python: Select Interpreter"
-            echo       Choose the global Python (not the .venv one^)
-            echo       Then close this terminal and run setup.bat again.
-            echo.
-            echo  Or: Open a standalone terminal (outside VS Code^) and run:
-            echo       rmdir /s /q .venv
-            echo       setup.bat
-            echo.
-            pause
-            exit /b 1
-        )
-    )
+if not exist ".venv" goto :create_venv
+if exist ".venv\Scripts\activate.bat" goto :venv_ok
+
+echo [WARN] Virtual environment is incomplete or corrupted. Recreating...
+rmdir /s /q .venv 2>nul
+if not exist ".venv" goto :create_venv
+
+echo [ERROR] Could not delete the broken .venv folder.
+echo         A program (likely VS Code) is locking files inside it.
+echo.
+echo  Fix: In VS Code press Ctrl+Shift+P, run "Python: Select Interpreter",
+echo       choose the global Python (not the .venv one), then re-run setup.bat.
+echo.
+echo  Or open a standalone terminal (outside VS Code) and run:
+echo       rmdir /s /q .venv
+echo       setup.bat
+echo.
+pause
+exit /b 1
+
+:create_venv
+echo Creating virtual environment...
+python -m venv .venv
+if %ERRORLEVEL% neq 0 (
+    echo [ERROR] Failed to create virtual environment.
+    echo  Try: python -m pip install --upgrade pip virtualenv
+    pause
+    exit /b 1
 )
-if not exist ".venv" (
-    echo Creating virtual environment...
-    python -m venv .venv
-    if %ERRORLEVEL% neq 0 (
-        echo [ERROR] Failed to create virtual environment.
-        echo  Try: python -m pip install --upgrade pip virtualenv
-        pause
-        exit /b 1
-    )
-    echo [OK] Virtual environment created.
-) else (
-    echo [OK] Virtual environment already exists.
-)
+echo [OK] Virtual environment created.
+goto :venv_done
+
+:venv_ok
+echo [OK] Virtual environment already exists.
+
+:venv_done
 echo.
 
 REM -- Activate virtual environment --------------------------------------
