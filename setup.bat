@@ -58,7 +58,23 @@ REM Check if venv exists AND is valid (has activate.bat)
 if exist ".venv" (
     if not exist ".venv\Scripts\activate.bat" (
         echo [WARN] Virtual environment is incomplete or corrupted. Recreating...
-        rmdir /s /q .venv
+        rmdir /s /q .venv 2>nul
+        if exist ".venv" (
+            echo [ERROR] Could not delete the broken .venv folder.
+            echo         A program (likely VS Code) is locking the files inside it.
+            echo.
+            echo  Fix: In VS Code, press Ctrl+Shift+P and run:
+            echo       "Python: Select Interpreter"
+            echo       Choose the global Python (not the .venv one^)
+            echo       Then close this terminal and run setup.bat again.
+            echo.
+            echo  Or: Open a standalone terminal (outside VS Code^) and run:
+            echo       rmdir /s /q .venv
+            echo       setup.bat
+            echo.
+            pause
+            exit /b 1
+        )
     )
 )
 if not exist ".venv" (
