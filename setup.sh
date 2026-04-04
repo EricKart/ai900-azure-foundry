@@ -80,7 +80,11 @@ echo ""
 
 # -- Install dependencies ------------------------------------------------
 echo "Installing dependencies (this may take 2-3 minutes)..."
-pip install -r requirements.txt --quiet
+
+# --prefer-binary tells pip to use pre-built wheels instead of compiling
+# from source. This prevents Pillow and other C-extension packages from
+# failing to build on macOS when Xcode/system libs are not present.
+pip install -r requirements.txt --quiet --prefer-binary
 echo "[OK] All dependencies installed."
 echo ""
 

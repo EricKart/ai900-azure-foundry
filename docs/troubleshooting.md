@@ -347,6 +347,45 @@ Then fill in your Azure keys.
 
 ## macOS-Specific Issues
 
+### Issue: `Failed building wheel for Pillow` during setup
+
+**Symptom:** `setup.sh` fails with an error like:
+```
+ERROR: Failed building wheel for Pillow
+× Failed to build installable wheels for some pyproject.toml based projects
+╰─> Pillow
+```
+
+**Why:** pip is trying to compile Pillow from source because no pre-built binary wheel was found for your Python version and macOS architecture. This happens more often on newer Python versions (3.12+) or Apple Silicon before all wheels are published.
+
+**Fix 1 — Use the updated `setup.sh` (already fixed):**
+The setup script now passes `--prefer-binary`, which always picks a pre-built wheel over source compilation. Pull the latest version of the repo and re-run:
+```bash
+git pull
+./setup.sh
+```
+
+**Fix 2 — Manual install with `--prefer-binary`:**
+If you already have the virtual environment activated:
+```bash
+pip install Pillow --prefer-binary
+pip install -r requirements.txt --prefer-binary
+```
+
+**Fix 3 — Install Xcode Command Line Tools (allows source builds):**
+```bash
+xcode-select --install
+```
+Then re-run `./setup.sh`. This provides the C compiler Pillow needs to build from source.
+
+**Fix 4 — Apple Silicon only:** If you're on M1/M2/M3/M4 and the above don't work:
+```bash
+brew install libjpeg
+pip install Pillow --prefer-binary
+```
+
+---
+
 ### Issue: Azure Speech SDK fails to import
 
 **Symptom:** `import azure.cognitiveservices.speech` fails
